@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OleaDiet — Générateur de Clés Premium Hors-ligne</title>
+    <title>Générateur de Clés Premium Hors-ligne</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -163,13 +163,8 @@
 <body>
 
 <div class="container">
-    <h1>OleaDiet Premium</h1>
+    <h1>Générateur Premium</h1>
     <div class="subtitle">Générateur de clés d'activation hors-ligne (2h)</div>
-
-    <div class="input-group">
-        <label for="secretKey">Clé Secrète Partagée</label>
-        <input type="text" id="secretKey" value="OleaDietPremiumOfflineSecretKey2026" placeholder="Saisir la clé secrète...">
-    </div>
 
     <div class="code-display">
         <div class="code" id="codeOut">------</div>
@@ -209,11 +204,7 @@
     }
 
     async function generatePremiumKey() {
-        const secretKey = document.getElementById('secretKey').value.trim();
-        if (!secretKey) {
-            alert("Veuillez saisir une clé secrète.");
-            return;
-        }
+        const secretKey = "OleaDietPremiumOfflineSecretKey2026";
 
         const BLOCK_MS = 7200000; // 2 heures en millisecondes
         const now = Date.now();
