@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OleaDiet — Générateur de Clés Premium Hors-ligne</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0D9488;
+            --primary-glow: rgba(13, 148, 136, 0.3);
+            --bg-dark: #0F172A;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at top right, rgba(13, 148, 136, 0.15), transparent 400px),
+                              radial-gradient(circle at bottom left, rgba(30, 41, 59, 0.5), transparent 400px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #2DD4BF, #0D9488);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text-main);
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .code-display {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px dashed rgba(13, 148, 136, 0.4);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .code {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: #2DD4BF;
+            text-shadow: 0 0 15px rgba(45, 212, 191, 0.4);
+            user-select: all;
+        }
+
+        .countdown {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .countdown span {
+            color: #F8FAFC;
+            font-weight: 600;
+        }
+
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #0D9488, #0F766E);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(13, 148, 136, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>OleaDiet Premium</h1>
+    <div class="subtitle">Générateur de clés d'activation hors-ligne (2h)</div>
+
+    <div class="input-group">
+        <label for="secretKey">Clé Secrète Partagée</label>
+        <input type="text" id="secretKey" value="OleaDietPremiumOfflineSecretKey2026" placeholder="Saisir la clé secrète...">
+    </div>
+
+    <div class="code-display">
+        <div class="code" id="codeOut">------</div>
+        <div class="countdown" id="timerOut">Cliquez sur Générer pour commencer</div>
+    </div>
+
+    <button class="btn" onclick="generatePremiumKey()">Générer le code actuel</button>
+
+    <div class="footer">
+        Conformité de bloc de 2 heures — Validez ce code dans votre application.
+    </div>
+</div>
+
+<script>
+    let timerInterval = null;
+
+    // Helper conversion string vers Uint8Array (UTF-8)
+    function stringToUint8Array(str) {
+        return new TextEncoder().encode(str);
+    }
+
+    // Algorithme d'HMAC-SHA256 identique à celui de Dart/Flutter
+    async function calculateHmacSha256(secretKey, message) {
+        const keyData = stringToUint8Array(secretKey);
+        const msgData = stringToUint8Array(message);
+
+        const cryptoKey = await window.crypto.subtle.importKey(
+            "raw",
+            keyData,
+            { name: "HMAC", hash: { name: "SHA-256" } },
+            false,
+            ["sign"]
+        );
+
+        const signature = await window.crypto.subtle.sign("HMAC", cryptoKey, msgData);
+        return new Uint8Array(signature);
+    }
+
+    async function generatePremiumKey() {
+        const secretKey = document.getElementById('secretKey').value.trim();
+        if (!secretKey) {
+            alert("Veuillez saisir une clé secrète.");
+            return;
+        }
+
+        const BLOCK_MS = 7200000; // 2 heures en millisecondes
+        const now = Date.now();
+        const currentCounter = Math.floor(now / BLOCK_MS);
+        
+        // Calcul du code à 6 chiffres
+        const hashBytes = await calculateHmacSha256(secretKey, currentCounter.toString());
+        
+        // Extraction de l'entier 32-bit non-signé sur les 4 premiers octets (Big-Endian)
+        const val = ((hashBytes[0] & 0x7f) << 24) |
+                    (hashBytes[1] << 16) |
+                    (hashBytes[2] << 8) |
+                    hashBytes[3];
+        
+        const codeValue = val % 1000000;
+        const codeString = codeValue.toString().padStart(6, '0');
+
+        // Affichage du code
+        document.getElementById('codeOut').textContent = codeString;
+
+        // Démarrage du compte à rebours
+        if (timerInterval) clearInterval(timerInterval);
+        
+        updateCountdown(now, BLOCK_MS);
+        timerInterval = setInterval(() => {
+            updateCountdown(Date.now(), BLOCK_MS);
+        }, 1000);
+    }
+
+    function updateCountdown(now, blockMs) {
+        const nextBlockStart = (Math.floor(now / blockMs) + 1) * blockMs;
+        const remainingMs = nextBlockStart - now;
+
+        if (remainingMs <= 0) {
+            clearInterval(timerInterval);
+            generatePremiumKey(); // Rafraîchir automatiquement si le bloc expire
+            return;
+        }
+
+        const hours = Math.floor(remainingMs / 3600000);
+        const minutes = Math.floor((remainingMs % 3600000) / 60000);
+        const seconds = Math.floor((remainingMs % 60000) / 1000);
+
+        const hStr = hours.toString().padStart(2, '0');
+        const mStr = minutes.toString().padStart(2, '0');
+        const sStr = seconds.toString().padStart(2, '0');
+
+        document.getElementById('timerOut').innerHTML = `Clé valide pendant encore : <span>${hStr}:${mStr}:${sStr}</span>`;
+    }
+</script>
+</body>
+</html>
+
